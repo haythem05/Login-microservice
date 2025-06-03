@@ -11,9 +11,9 @@ public class Twilioproperties {
 	
 	
 	public Twilioproperties() {
-		this.accountSid="AC0ee5594092accfe1a8828b3ef8e7b070";
-		this.authToken="2045006392ea0f403ae93ad2bdf91019";
-		this.fromNumber="+19382015306";
+		this.accountSid="";
+		this.authToken="";
+		this.fromNumber="+";
 	}
 	
 	private String accountSid;
