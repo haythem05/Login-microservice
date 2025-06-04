@@ -1,8 +1,6 @@
 package tn.esprit.loginmicroservice.service;
 
-import tn.esprit.pokerplaning.Entities.User.AuthenticationRequest;
-import tn.esprit.pokerplaning.Entities.User.AuthenticationResponse;
-import tn.esprit.pokerplaning.Entities.User.User;
+import tn.esprit.pokerplaning.Entities.User.*;
 import tn.esprit.pokerplaning.Repositories.User.UserRepository;
 import tn.esprit.pokerplaning.Services.User.AuthenticationService;
 import tn.esprit.pokerplaning.Services.User.JwtService;
@@ -17,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,4 +69,49 @@ public class AuthenticationServiceTest {
         assertEquals("Your account is banned", response.getMessage());
         assertNull(response.getToken());
     }
+    @Test
+    void testRegisterSuccess() throws IOException {
+        // Arrange
+        RegisterRequest request = RegisterRequest.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john.doe@example.com")
+                .password("password123")
+                .gender(Gender.Male)
+                .phone("123456789")
+                .skillRate(5)
+                .role(Role.Developpeur)
+                .build();
+
+        User mockUser = User.builder()
+                .userId(1L)
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .password("encodedPassword")
+                .gender(request.getGender())
+                .phone(request.getPhone())
+                .skillRate(request.getSkillRate())
+                .role(request.getRole())
+                .build();
+
+        // Mock behavior
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(mockUser);
+        when(jwtService.generateToken(any(User.class))).thenReturn("mocked-jwt-token");
+
+        // Act
+        AuthenticationResponse response = authenticationService.register(request, null);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("mocked-jwt-token", response.getToken());
+        assertEquals(mockUser.getEmail(), response.getUser().getEmail());
+        verify(userRepository, times(1)).save(any(User.class));
+        verify(jwtService, times(1)).generateToken(any(User.class));
+    }
+
+
+
+
 }
