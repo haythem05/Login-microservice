@@ -5,6 +5,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,7 +80,8 @@ public class AuthenticationService {
 */
   public AuthenticationResponse authenticate(AuthenticationRequest request) throws ChangeSetPersister.NotFoundException {
       User user = repository.findByEmail(request.getEmail())
-              .orElseThrow(ChangeSetPersister.NotFoundException::new);
+              .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
 
       if (user.isBanned()) {
           // Send SMS to notify the user that their account is banned
