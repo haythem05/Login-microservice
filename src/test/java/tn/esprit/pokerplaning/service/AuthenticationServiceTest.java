@@ -1,4 +1,4 @@
-package tn.esprit.loginmicroservice.service;
+package tn.esprit.pokerplaning.service;
 
 import tn.esprit.pokerplaning.Entities.User.*;
 import tn.esprit.pokerplaning.Repositories.User.UserRepository;
@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
