@@ -1,9 +1,7 @@
-package tn.esprit.loginmicroservice.controller;
+package tn.esprit.pokerplaning.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import tn.esprit.pokerplaning.Entities.User.AuthenticationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+@SpringBootTest(classes = tn.esprit.pokerplaning.LoginMicroserviceApplication.class)
 @AutoConfigureMockMvc
 @EnableAutoConfiguration
 public class AuthControllerTest {
@@ -23,12 +21,11 @@ public class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
-    public void testLoginWithValidCredentials_returns200() throws Exception {
+    public void testLoginWithValidCredentials() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest();
         request.setEmail("test@example.com");
         request.setPassword("password");
@@ -40,7 +37,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void testLoginWithInvalidCredentials_returns403() throws Exception {
+    public void testLoginWithInvalidCredentials() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest();
         request.setEmail("invalid@example.com");
         request.setPassword("wrongpassword");
