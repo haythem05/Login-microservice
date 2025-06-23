@@ -1,4 +1,4 @@
-package tn.esprit.pokerplaning.Services.User;
+package tn.esprit.pokerplaning.Services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -9,9 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import tn.esprit.pokerplaning.Entities.User.*;
-import tn.esprit.pokerplaning.Repositories.User.UserRepository;
-import tn.esprit.pokerplaning.Services.User.twilio.SmsService;
+import tn.esprit.pokerplaning.Entities.*;
+import tn.esprit.pokerplaning.Repositories.UserRepository;
+import tn.esprit.pokerplaning.Services.twilio.SmsService;
 
 import java.io.IOException;
 

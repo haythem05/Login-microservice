@@ -1,11 +1,12 @@
 package tn.esprit.pokerplaning.service;
 
-import tn.esprit.pokerplaning.Entities.User.*;
-import tn.esprit.pokerplaning.Repositories.User.UserRepository;
-import tn.esprit.pokerplaning.Services.User.AuthenticationService;
-import tn.esprit.pokerplaning.Services.User.JwtService;
-import tn.esprit.pokerplaning.Services.User.UserServices;
-import tn.esprit.pokerplaning.Services.User.twilio.SmsService;
+import org.springframework.test.context.ActiveProfiles;
+import tn.esprit.pokerplaning.Entities.*;
+import tn.esprit.pokerplaning.Repositories.UserRepository;
+import tn.esprit.pokerplaning.Services.AuthenticationService;
+import tn.esprit.pokerplaning.Services.JwtService;
+import tn.esprit.pokerplaning.Services.UserServices;
+import tn.esprit.pokerplaning.Services.twilio.SmsService;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+@ActiveProfiles("test")
 
 public class AuthenticationServiceTest {
 

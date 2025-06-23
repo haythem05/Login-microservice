@@ -3,24 +3,30 @@ package tn.esprit.pokerplaning.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import tn.esprit.pokerplaning.Entities.User.AuthenticationRequest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import tn.esprit.pokerplaning.Entities.AuthenticationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import tn.esprit.pokerplaning.Entities.User.Role;
-import tn.esprit.pokerplaning.Entities.User.User;
-import tn.esprit.pokerplaning.Repositories.User.UserRepository;
+import tn.esprit.pokerplaning.Entities.Role;
+import tn.esprit.pokerplaning.Entities.User;
+import tn.esprit.pokerplaning.Repositories.UserRepository;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(classes = tn.esprit.pokerplaning.LoginMicroserviceApplication.class)
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @EnableAutoConfiguration
+@EntityScan(basePackages = "tn.esprit.pokerplaning.Entities")
+@TestPropertySource("classpath:application-test.properties")
 public class AuthControllerTest {
 
     @Autowired private MockMvc mockMvc;
