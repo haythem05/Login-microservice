@@ -87,3 +87,20 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/login-microservice:1.0
+  trivy_scan:
+    name: Trivy Scan
+    runs-on: ubuntu-latest
+    needs: dockerpush
+
+    steps:
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
+      - name: Scan Docker Image
+        run: trivy image ${{ secrets.DOCKER_HUB_USERNAME }}/login-microservice:1.0
