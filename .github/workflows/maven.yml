@@ -23,10 +23,10 @@ jobs:
           cache: maven
 
       - name: Compile and Package (dev profile)
-        run: mvn clean package -DskipTests -Pdev
+        run: mvn clean package -DskipTests
 
       - name: Run Unit and Functional Tests (test profile)
-        run: mvn test -Ptest
+        run: mvn test
   sonartest:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
