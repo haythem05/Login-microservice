@@ -27,6 +27,32 @@ jobs:
 
       - name: Run Unit and Functional Tests (test profile)
         run: mvn test
+  dependency-check:
+    name: Dependency Vulnerability Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OWASP Dependency-Check
+        run: |
+          wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
+          unzip dependency-check-8.4.0-release.zip -d dependency-check
+
+      - name: Run OWASP Dependency-Check
+        run: |
+          ./dependency-check/bin/dependency-check.sh \
+            --project "LoginMicroservice" \
+            --scan . \
+            --format "HTML" \
+            --out dependency-check-report
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-check-report
+          path: dependency-check-report
+
   sonartest:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
