@@ -33,26 +33,28 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install OWASP Dependency-Check
         run: |
-          wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.4/dependency-check-8.4.4-release.zip
-          unzip dependency-check-8.4.4-release.zip -d dependency-check
+          wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.2/dependency-check-8.4.2-release.zip
+          unzip dependency-check-8.4.2-release.zip -d dependency-check
 
-      - name: Run OWASP Dependency-Check
+      - name: Run OWASP Dependency-Check (JSON only)
         run: |
           ./dependency-check/dependency-check/bin/dependency-check.sh \
             --project "LoginMicroservice" \
             --scan . \
-            --format "HTML" \
+            --format "JSON" \
             --out dependency-check-report
 
-      - name: Upload HTML Report
+      - name: Upload JSON Report
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
-          path: dependency-check-report
+          path: dependency-check-report/dependency-check-report.json
+
 
   sonartest:
     name: SonarQube Analysis
