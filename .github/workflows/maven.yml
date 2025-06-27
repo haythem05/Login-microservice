@@ -55,6 +55,7 @@ jobs:
             --scan target \
             --format "JSON" \
             --out dependency-check-report
+            --failOnCVSS 7.0
       
 
       - name: Upload JSON Report
