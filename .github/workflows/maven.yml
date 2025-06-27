@@ -46,13 +46,14 @@ jobs:
           wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.2/dependency-check-8.4.2-release.zip
           unzip dependency-check-8.4.2-release.zip -d dependency-check
 
-      - name: Run OWASP Dependency-Check (JSON only)
+      - name: Run OWASP Dependency-Check (target only)
         run: |
           ./dependency-check/dependency-check/bin/dependency-check.sh \
             --project "LoginMicroservice" \
-            --scan . --exclude dependency-check --project "LoginMicroservice" --out dependency-check-report \
+            --scan target \
             --format "JSON" \
             --out dependency-check-report
+      
 
       - name: Upload JSON Report
         uses: actions/upload-artifact@v4
