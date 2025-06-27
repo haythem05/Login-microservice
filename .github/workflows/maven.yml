@@ -50,7 +50,7 @@ jobs:
         run: |
           ./dependency-check/dependency-check/bin/dependency-check.sh \
             --project "LoginMicroservice" \
-            --scan . \
+            --scan ./target --project "LoginMicroservice" --out dependency-check-report \
             --format "JSON" \
             --out dependency-check-report
 
