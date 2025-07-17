@@ -141,16 +141,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y trivy
 
-      - name: Save Trivy Report
+      - name:  Run Trivy Scan 
+        run: |
+          trivy image \
+            --exit-code 1 \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --format table \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/login-microservice:1.0
+      - name:   Save Trivy JSON Report
         run: |
           trivy image \
             --format json \
-            --output trivy-report.json \
             --ignore-unfixed \
+            --output trivy-report.json \
             ${{ secrets.DOCKER_HUB_USERNAME }}/login-microservice:1.0
 
-      - name: Upload Trivy Report Artifact
+      - name: Upload Trivy Report 
         uses: actions/upload-artifact@v4
         with:
           name: trivy-report
           path: trivy-report.json
+
