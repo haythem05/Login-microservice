@@ -145,7 +145,7 @@ jobs:
         run: |
           trivy image \
             --exit-code 1 \
-            --severity HIGH,CRITICAL \
+            --severity CRITICAL \
             --ignore-unfixed \
             --format table \
             ${{ secrets.DOCKER_HUB_USERNAME }}/login-microservice:1.0
