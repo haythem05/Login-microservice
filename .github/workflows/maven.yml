@@ -22,10 +22,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Compile and Package (dev profile)
+      - name: Compile and Package 
         run: mvn clean package -DskipTests
 
-      - name: Run Unit and Functional Tests (test profile)
+      - name: Run Unit and Functional Tests 
         run: mvn test
   dependency-check:
     name: Dependency Vulnerability Check
