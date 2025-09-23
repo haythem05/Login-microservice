@@ -39,8 +39,8 @@ jobs:
       - name: Set up Java 
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: '17urin'
+      
 
               
       - name: Download and resolve Maven dependencies
