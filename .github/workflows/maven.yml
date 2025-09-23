@@ -27,7 +27,8 @@ jobs:
 
       - name: Run Unit and Functional Tests 
         run: mvn test
-
+        
+        
   dependency-check:
     name: Dependency Vulnerability Check
     runs-on: ubuntu-latest
@@ -35,40 +36,81 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        
       - name: Set up Java 
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'temurin'
-
-              
-      - name: Download and resolve Maven dependencies
+          
+      - name: Debug - Check file structure
+        run: |
+          echo "=== Current directory structure ==="
+          pwd
+          ls -la
+          echo ""
+          echo "=== Looking for pom.xml ==="
+          find . -name "pom.xml" -type f
+          echo ""
+          echo "=== Content of pom.xml (first 50 lines) ==="
+          head -50 pom.xml || echo "pom.xml not found in current directory"
+          
+      - name: Build and resolve dependencies
         run: |
           mvn clean compile -DskipTests
-          mvn dependency:resolve
-          mvn dependency:resolve-sources
+          mvn dependency:tree
           
-      - name: Build app to generate dependencies
-        run: mvn clean package -DskipTests
-      
-      - name: Run Trivy vulnerability scanner
+      - name: Try Trivy with explicit pom.xml path
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './pom.xml'  # Explicit path
+          format: 'json'
+          output: 'trivy-pom-report.json'
+          severity: 'LOW,MEDIUM,HIGH,CRITICAL'  # All severities for testing
+          exit-code: '0'
+          
+      - name: Try Trivy with current directory
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
           scan-ref: '.'
           format: 'json'
-          output: 'trivy-report.json'
-          severity: 'CRITICAL'
-          exit-code: '1'  
-        
-      - name: Upload Trivy Report
-        uses: actions/upload-artifact@v4
-        if: always()  
+          output: 'trivy-dir-report.json'
+          severity: 'LOW,MEDIUM,HIGH,CRITICAL'
+          exit-code: '0'
+          
+      - name: Try Trivy with target directory (after build)
+        uses: aquasecurity/trivy-action@master
         with:
-          name: trivy-dependency-report
-          path: trivy-report.json
-
+          scan-type: 'fs'
+          scan-ref: './target'
+          format: 'json'
+          output: 'trivy-target-report.json'
+          severity: 'LOW,MEDIUM,HIGH,CRITICAL'
+          exit-code: '0'
+        continue-on-error: true
+          
+      - name: Display all reports
+        run: |
+          echo "=== POM.XML SCAN REPORT ==="
+          cat trivy-pom-report.json | jq '.Results[] | select(.Target != null)' || echo "No results in pom report"
+          echo ""
+          echo "=== DIRECTORY SCAN REPORT ==="
+          cat trivy-dir-report.json | jq '.Results[] | select(.Target != null)' || echo "No results in dir report"
+          echo ""
+          echo "=== TARGET SCAN REPORT ==="
+          cat trivy-target-report.json | jq '.Results[] | select(.Target != null)' || echo "No results in target report" 
+          
+      - name: Upload all reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-debug-reports
+          path: |
+            trivy-pom-report.json
+            trivy-dir-report.json
+            trivy-target-report.json
 
 
   sonartest:
