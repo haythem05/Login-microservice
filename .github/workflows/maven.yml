@@ -41,10 +41,14 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-        
-      - name: Build app to generate dependencies
-        run: mvn clean package -DskipTests
-      
+
+              
+      - name: Download and resolve Maven dependencies
+        run: |
+          mvn clean compile -DskipTests
+          mvn dependency:resolve
+          mvn dependency:resolve-sources
+          
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
