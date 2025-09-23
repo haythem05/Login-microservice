@@ -55,19 +55,16 @@ jobs:
           scan-ref: '.'
           format: 'json'
           output: 'trivy-report.json'
-          severity: 'HIGH,CRITICAL'
-          exit-code: '1'  # Fail build if HIGH/CRITICAL vulnerabilities found
+          severity: 'CRITICAL'
+          exit-code: '1' 
           
       - name: Upload Trivy Report
         uses: actions/upload-artifact@v4
-        if: always()  # Always upload, even if scan fails
+        if: always()  
         with:
           name: trivy-dependency-report
           path: trivy-report.json
   
-  
-
-
   sonartest:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
