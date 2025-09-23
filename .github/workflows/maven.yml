@@ -39,8 +39,8 @@ jobs:
       - name: Set up Java 
         uses: actions/setup-java@v4
         with:
-          java-version: '17urin'
-      
+          java-version: '17'
+          distribution: 'temurin'
 
               
       - name: Download and resolve Maven dependencies
@@ -49,6 +49,9 @@ jobs:
           mvn dependency:resolve
           mvn dependency:resolve-sources
           
+      - name: Build app to generate dependencies
+        run: mvn clean package -DskipTests
+      
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
